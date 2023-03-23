@@ -6,6 +6,7 @@ import { AsideComponent } from './components/aside/aside.component';
 import { ErrorComponent } from './components/error/error.component';
 import { RouterModule } from '@angular/router';
 import { QuillEditorComponent } from './components/quill-editor/quill-editor.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -26,7 +27,8 @@ import { QuillEditorComponent } from './components/quill-editor/quill-editor.com
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ]
 })
 export class SharedModule { }
