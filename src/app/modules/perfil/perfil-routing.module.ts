@@ -13,16 +13,16 @@ const routes: Routes = [
     component: PerfilComponent,
     children: [
       {
-        path: ':id',
-        component: VerUsuarioComponent
-      },
-      {
         path: 'config',
         component: ConfigComponent,
       },
       {
         path: 'create',
         component: CreateComponent
+      },
+      {
+        path: ':id',
+        component: VerUsuarioComponent
       },
       {
         path: 'editor/:id',

@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 gap-2 justify-end">
+<div class="navbar gap-2 justify-end">
 
   <label for="my-drawer-2" class="btn btn-ghost drawer-button lg:hidden">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -8,7 +8,7 @@
 
   <div class="flex-1">
     <div class="form-control w-full lg:w-1/2">
-      <input type="text" placeholder="Search" class="input input-bordered w-full">
+      <input type="text" placeholder="Search" autocomplete="off" class="input input-bordered w-full">
     </div>
   </div>
 
@@ -27,8 +27,8 @@
         </div>
       </label>
       <ul tabindex="0" class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-        <li><a class="justify-between">Profile</a></li>
-        <li><a>Settings</a></li>
+        <li><a routerLinkActive="active" routerLink="/home/perfil/_iduser_">Profile</a></li>
+        <li><a routerLinkActive="active" routerLink="/home/perfil/config">Settings</a></li>
         <li><a>Logout</a></li>
       </ul>
     </div>

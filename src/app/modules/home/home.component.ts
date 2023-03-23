@@ -8,19 +8,21 @@ import { Component, OnInit } from '@angular/core';
       <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 
       <div class="drawer-content">
-        <app-header></app-header>
+        <app-header class="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100
+  bg-base-100 text-base-content shadow-sm"></app-header>
 
         <div class="flex p-4 gap-2">
 
-          <div class="bg-pink-500 basis-full">
+          <div class="md:basis-full w-full md:w-auto ">
             <router-outlet></router-outlet>
           </div>
 
-          <div class="bg-pink-700 basis-1/3">
+          <div class="basis-1/2 md:block hidden">
             <app-aside></app-aside>
           </div>
 
         </div>
+
 
       </div>
 

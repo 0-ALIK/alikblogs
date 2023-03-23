@@ -2,3 +2,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.ql-toolbar {
+  border-bottom: 2px solid #fff !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.ql-snow {
+  /* border: none !important; */
+}
+
+.ql-snow .ql-stroke {
+  stroke: #fff;
+}
+
+.ql-snow .ql-fill {
+  fill: #fff;
+}
+
+.ql-container {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  width: 100%;
+  border: none !important;
+}
+
+.ql-editor .ql-size-small {
+  font-size: 0.875rem;
+  line-height: 1.25rem
+}
+
+.ql-editor .ql-size-large {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.ql-editor .ql-size-huge {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.ql-snow .ql-picker {
+  color: #fff;
+}
+
+.ql-snow .ql-picker-options {
+  background-color: rgb(36, 41, 51);
+}

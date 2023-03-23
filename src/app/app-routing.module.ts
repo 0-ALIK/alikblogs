@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { ErrorComponent } from './shared/components/error/error.component';
 
 const routes: Routes = [
   {
-    path: 'landing',
+    path: '',
     component: LandingPageComponent,
+    pathMatch: 'full'
   },
   {
     path: 'home',
@@ -16,9 +18,8 @@ const routes: Routes = [
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: '',
-    redirectTo: 'landing',
-    pathMatch: 'full'
+    path: '**',
+    component: ErrorComponent
   }
 ];
 
