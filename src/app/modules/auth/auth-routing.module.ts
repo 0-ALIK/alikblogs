@@ -2,15 +2,32 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
 import { AuthComponent } from './auth.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AuthComponent
-  },
-  {
-    path: '**',
-    component: ErrorComponent
+    component: AuthComponent,
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
+      },
+      {
+        path: '',
+        redirectTo: '/auth/login',
+        pathMatch: 'full'
+      },
+      {
+        path: '**',
+        component: ErrorComponent
+      }
+    ]
   }
 ];
 

@@ -21,25 +21,30 @@ export interface Like {
 };
 
 export interface Usuario {
-  _id: string,
+  _id?: string,
   correo: string,
   nombre: string,
   about?: string,
   img?: string,
-  fecha: Date | string,
-  estado: boolean
+  fecha?: Date | string,
+  estado?: boolean
+}
+
+export interface Error {
+  msg: string
 }
 
 export interface Response {
-  cantidad?: number,
-  token?: string,
-  tokenRenovado?: string,
-  usuario?: Usuario,
-  usuarios?: Usuario[],
+  cantidad: number,
+  token: string,
+  tokenRenovado: string,
+  usuario: Usuario,
+  usuarios: Usuario[],
   blog: Blog,
   blogs: Blog[],
   comentario: Comentario,
   comentarios: Comentario[],
-  like: Like
+  like: Like,
+  errors: Error[]
 };
 

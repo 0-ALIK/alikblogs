@@ -1,0 +1,83 @@
+<h1 class="text-xl text-center">Register</h1>
+<form (ngSubmit)="enviarFormulario()" [formGroup]="formulario">
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Ingrese su username</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('nombre', 'required')">El nombre es requerido</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('nombre', 'minlength')">Es muy pequeño</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('nombre', 'maxlength')">Es muy grande</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('nombre', 'pattern')">El nombre no tiene un formato correcto</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('nombre', 'existe')">Este nombre esta en uso</span>
+    </label>
+    <input type="text"
+      placeholder="Nombre"
+      formControlName="nombre"
+      class="input input-bordered input-ghost w-full">
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Ingrese su correo</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('correo', 'required')">El correo es requerido</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('correo', 'email')">No es un formato de correo valido</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('correo', 'existe')">Este correo ya esta en uso</span>
+    </label>
+    <input type="email"
+      formControlName="correo"
+      placeholder="Correo"
+      class="input input-bordered input-ghost w-full">
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Ingrese su contraseña</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('pass', 'required')">La contraseña es requerida</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('pass', 'pattern')">Por favor use: (Aa, 0-9, $#&)</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('pass', 'minlength')">La contraseña es muy corta</span>
+    </label>
+    <input type="password"
+      formControlName="pass"
+      placeholder="Contraseña"
+      class="input input-bordered input-ghost w-full">
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Confirme su contraseña</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('passc', 'required')">Por favor, confirme la contraseña</span>
+    </label>
+    <input type="password"
+      formControlName="passc"
+      placeholder="Contraseña"
+      class="input input-bordered input-ghost w-full">
+  </div>
+
+  <div class="animate-spin w-12 h-12 mx-auto mt-8" *ngIf="isLoading">
+    <svg xmlns="http://www.w3.org/2000/svg" class="" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+    </svg>
+  </div>
+
+  <div class="alert alert-error shadow-lg mt-8" *ngIf="error">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>Algo salio mal al registrarse</span>
+    </div>
+  </div>
+
+  <div>
+    <button class="btn btn-primary btn-wide mt-8 mx-auto flex gap-2" [disabled]="!formulario.valid">
+      Registrarse
+    </button>
+  </div>
+
+</form>
+<!--
+<div>
+  <pre>"nombre": {{formulario.get('nombre')?.errors | json}}</pre>
+  <pre>"correo": {{formulario.get('correo')?.errors | json}}</pre>
+  <pre>"pass": {{formulario.get('pass')?.errors | json}}</pre>
+  <pre>"passc": {{formulario.get('passc')?.errors | json}}</pre>
+</div> -->
+

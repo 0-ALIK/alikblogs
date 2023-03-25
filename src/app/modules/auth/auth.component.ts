@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-auth',
@@ -27,29 +27,12 @@ import { Component, OnInit } from '@angular/core';
       </div>
 
       <div class="tabs">
-        <a class="tab tab-lifted tab-active bg-base-100/20 backdrop-blur">Login</a>
-        <a class="tab tab-lifted">Register</a>
+        <a class="tab tab-lg" routerLink="/auth/login" routerLinkActive="tap-active">Login</a>
+        <a class="tab tab-lg" routerLink="/auth/register" routerLinkActive="tap-active">Register</a>
       </div>
+
       <div class="w-96 h-auto p-4 bg-base-100/20 rounded-xl backdrop-blur max-w-[90%]">
-        <h1 class="text-xl text-center">Login</h1>
-
-        <form>
-          <div class="form-control w-full">
-            <label class="label">
-              <span class="label-text">Enter your email</span>
-            </label>
-            <input type="text" placeholder="Type here" class="input input-bordered input-ghost w-full">
-          </div>
-
-          <div class="form-control w-full">
-            <label class="label">
-              <span class="label-text">Enter your password</span>
-            </label>
-            <input type="password" placeholder="Type here" class="input input-bordered input-ghost w-full">
-          </div>
-
-          <button class="btn btn-primary btn-wide mt-8 mx-auto">Iniciar</button>
-        </form>
+        <router-outlet></router-outlet>
       </div>
 
     </div>
@@ -57,11 +40,4 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class AuthComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class AuthComponent {}

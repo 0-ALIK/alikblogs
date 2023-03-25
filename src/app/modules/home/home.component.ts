@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 
         <div class="flex p-4 gap-2">
 
-          <div class="md:basis-full w-full md:w-auto ">
+          <div class="xl:basis-full md:basis-1/2 w-full md:w-auto ">
             <router-outlet></router-outlet>
           </div>
 
