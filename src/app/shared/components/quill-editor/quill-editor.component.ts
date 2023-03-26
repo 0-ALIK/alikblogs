@@ -63,7 +63,6 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
   private deleteContents: TextChangeHandler = (delta, oldContents, source) => {
     if(source !== 'user') return;
-    console.clear();
 
     delta.ops.forEach( op => {
 
@@ -79,9 +78,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
             console.log(a);
           }
         });
-
       }
-
     });
   };
 
@@ -93,8 +90,8 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   public ngAfterViewInit(): void {
     this.quillEditor = new Quill( this.editorRef.nativeElement, this.quillOptions);
     this.toolbar = this.quillEditor.getModule('toolbar');
-    this.toolbar.addHandler('image', this.imageHandler);
-    this.quillEditor.on('text-change', this.deleteContents);
+    //this.toolbar.addHandler('image', this.imageHandler);
+    //this.quillEditor.on('text-change', this.deleteContents);
   }
 
   public ngOnDestroy(): void {}

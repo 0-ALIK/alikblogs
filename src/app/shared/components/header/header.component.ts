@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Usuario } from 'src/app/interfaces/responses.interface';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -9,7 +9,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
   styles: [
   ]
 })
-export class HeaderComponent implements AfterViewInit, OnDestroy, OnInit {
+export class HeaderComponent implements OnDestroy, OnInit {
 
   private sub!: Subscription;
 
@@ -23,27 +23,25 @@ export class HeaderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit(): void {
     if(this.usuarioService.usuarioAuth) {
-      console.log('xd');
       this.usuarioAuth = this.usuarioService.usuarioAuth;
       this.isLoading = false;
+      return;
     }
 
     const token = localStorage.getItem('token') || '';
     this.sub = this.usuarioService.verificarAuth(token).subscribe({
       next: resp => {
-        this.usuarioAuth = resp.usuario
+        if(resp.usuario)
+          this.usuarioAuth = resp.usuario
         this.isLoading = false;
       },
       error: error => console.log( error )
     });
   }
 
-  ngAfterViewInit(): void {
-    console.log('HIJO DE PUTAAA');
-  }
-
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    if(this.sub)
+      this.sub.unsubscribe();
   }
 
 }

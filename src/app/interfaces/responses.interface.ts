@@ -2,31 +2,28 @@ export interface Blog {
   _id: string,
   titulo: string,
   contenido: string
-  fecha: Date | string,
+  fecha: Date,
   portada: string,
   publicado: boolean,
-  usuario: string
+  usuario: Usuario
 };
 
 export interface Comentario {
-  usuario: string,
-  blog: string,
-  fecha: Date | string,
+  _id: string
+  usuario?: Usuario,
+  blog?: Blog,
+  fecha: Date,
   contenido: string
 };
 
-export interface Like {
-  usuario: string,
-  blog: string
-};
 
 export interface Usuario {
   _id?: string,
-  correo: string,
+  correo?: string,
   nombre: string,
   about?: string,
   img?: string,
-  fecha?: Date | string,
+  fecha?: Date,
   estado?: boolean
 }
 
@@ -44,7 +41,7 @@ export interface Response {
   blogs: Blog[],
   comentario: Comentario,
   comentarios: Comentario[],
-  like: Like,
+
   errors: Error[]
 };
 

@@ -8,7 +8,7 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { AboutComponent } from './pages/about/about.component';
 import { VerBlogComponent } from './pages/ver-blog/ver-blog.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     HomeRoutingModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class HomeModule { }
