@@ -11,9 +11,9 @@ import { Component, OnInit } from '@angular/core';
         <app-header class="sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100
   bg-base-100 text-base-content shadow-sm"></app-header>
 
-        <div class="flex p-4 gap-2">
+        <div class="flex p-2 gap-2">
 
-          <div class="xl:basis-full md:basis-1/2 w-full md:w-auto ">
+          <div class="basis-full w-full md:w-auto">
             <router-outlet></router-outlet>
           </div>
 

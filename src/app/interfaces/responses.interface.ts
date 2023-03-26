@@ -8,6 +8,11 @@ export interface Blog {
   usuario: Usuario
 };
 
+export interface Social {
+  seguidores: Usuario[],
+  seguidos: Usuario[]
+}
+
 export interface Comentario {
   _id: string
   usuario?: Usuario,
@@ -18,12 +23,12 @@ export interface Comentario {
 
 
 export interface Usuario {
-  _id?: string,
+  _id: string,
   correo?: string,
   nombre: string,
   about?: string,
   img?: string,
-  fecha?: Date,
+  fecha?: string,
   estado?: boolean
 }
 

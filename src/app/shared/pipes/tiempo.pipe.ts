@@ -5,7 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TiempoPipe implements PipeTransform {
 
-  transform(value: Date | string): string {
+  transform(value: Date | string | undefined): string {
+    if(!value) {
+      return 'no se sabe cuando';
+    }
+
     const fecha: Date = new Date(value);
     const fechaActual: Date = new Date();
 

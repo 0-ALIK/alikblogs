@@ -80,11 +80,6 @@ export class VerBlogComponent implements OnInit, OnDestroy {
 
     this.subs.push( sub );
 
-    if(this.usuarioService.usuarioAuth) {
-      this.usuarioAuth = this.usuarioService.usuarioAuth;
-      return;
-    }
-
     this.getUsuarioAuth();
   }
 
@@ -161,6 +156,11 @@ export class VerBlogComponent implements OnInit, OnDestroy {
   }
 
   private getUsuarioAuth(): void {
+    if(this.usuarioService.usuarioAuth) {
+      this.usuarioAuth = this.usuarioService.usuarioAuth;
+      return;
+    }
+
     const token = localStorage.getItem('token') || '';
     const subusuario = this.usuarioService.verificarAuth(token).subscribe({
       next: resp => {
