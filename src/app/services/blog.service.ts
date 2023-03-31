@@ -93,6 +93,22 @@ export class BlogService {
     );
   }
 
+  public getBlogsByUser(id: string): Observable<IBlogResponse> {
+    return this.http.get<IBlogResponse>(this.host+'/blog/all/'+id);
+  }
+
+  public getBlogsNoPubByUser(id: string): Observable<IBlogResponse> {
+    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+    return this.http.get<IBlogResponse>(this.host+'/blog/no/publicados', {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.usuarioService.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
   public getLikesBlog(id: string): Observable<ILikeUsuarios> {
     return this.http.get<ILikeUsuarios>(this.host+'/like/usuario/'+id);
   }
@@ -113,6 +129,19 @@ export class BlogService {
   public quitarLike(id: string): Observable<ILikeUsuarios> {
     const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
     return this.http.delete<ILikeUsuarios>(this.host+'/like/'+id, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.usuarioService.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
+  public crearBlogBorrador(data: any): Observable<any> {
+    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+
+    return this.http.post<any>(this.host+'/blog', data, {headers}).pipe(
       catchError( (error: HttpErrorResponse) => {
         if(error.status === 401) {
           this.usuarioService.authError = true;

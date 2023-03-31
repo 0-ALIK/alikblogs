@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -27,9 +27,7 @@ export class UsuarioService {
 
   public usuarioAuth!: Usuario;
 
-  public seguidoresAuth!: Usuario[];
-
-  public seguidosAuth!: Usuario[];
+  public socialAuth!: Social;
 
   constructor(private http: HttpClient) {}
 
@@ -56,11 +54,6 @@ export class UsuarioService {
         if(resp.usuario) {
           this.usuarioAuth = resp.usuario;
           this.definirSocial();
-          console.log({
-            usuario: this.usuarioAuth,
-            seguidores: this.seguidoresAuth,
-            seguidos: this.seguidosAuth
-          });
         }
       })
     );
@@ -88,11 +81,6 @@ export class UsuarioService {
         if(resp.usuario) {
           this.usuarioAuth = resp.usuario;
           this.definirSocial();
-          console.log({
-            usuario: this.usuarioAuth,
-            seguidores: this.seguidoresAuth,
-            seguidos: this.seguidosAuth
-          });
         }
       }),
       catchError( error => {
@@ -107,12 +95,35 @@ export class UsuarioService {
     return this.http.get<Social>(this.host+'/seguidor/social/'+id);
   }
 
+  public seguirUsuario(id: string): Observable<IAuth> {
+    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+    return this.http.post<IAuth>(this.host+'/seguidor/seguir/'+id, {}, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
+  public dejarSeguirUsuario(id: string): Observable<IAuth> {
+    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+    return this.http.delete<IAuth>(this.host+'/seguidor/unfollow/'+id, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
   private definirSocial(): void {
     if(this.usuarioAuth._id) {
       this.getSocialById(this.usuarioAuth._id).subscribe({
         next: resp => {
-          this.seguidoresAuth = resp.seguidores;
-          this.seguidosAuth = resp.seguidos;
+          this.socialAuth = resp;
         }
       })
     }

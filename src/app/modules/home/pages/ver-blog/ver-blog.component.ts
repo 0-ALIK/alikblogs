@@ -116,7 +116,7 @@ export class VerBlogComponent implements OnInit, OnDestroy {
 
   public comentar(): void {
     const { contenido } = this.formulario.value;
-    console.log(contenido);
+
     const subdejarComent = this.blogService.dejarComentario(this.blog._id, contenido).subscribe({
       next: resp => {
         if(resp.tokenRenovado)
@@ -150,7 +150,6 @@ export class VerBlogComponent implements OnInit, OnDestroy {
   }
 
   public eliminarBlogPrev(): void {
-    console.log('entre');
     this.blogService.blogPorEliminar = this.blog;
     this.blogService.eliminarConfirm = true;
   }

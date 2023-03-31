@@ -8,12 +8,13 @@
 
   <div class="avatar mx-auto">
     <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2" *ngIf="usuario">
-      <img [src]="usuario.img">
+      <img [src]="usuario.img || 'assets/user.png'">
     </div>
     <!-- ESQUELETO -->
     <div class="w-24 rounded-full bg-base-content animate-pulse" *ngIf="!usuario">
     </div>
   </div>
+
   <div>
     <div *ngIf="usuario">
       <h1 class="text-center text-lg font-bold">{{usuario.nombre}}</h1>
@@ -27,8 +28,20 @@
     </div>
   </div>
 
+  <div *ngIf="usuario && social" class="w-auto mx-auto">
+    <div *ngIf="usuario._id !== usuarioAuth._id">
+      <button
+        class="btn btn-wide"
+        [ngClass]="!siguiendo ? 'btn-primary' : ''"
+        [disabled]="botonDeshabilitado"
+        (click)="seguirDejarSeguir()">
+        {{ !siguiendo ? 'Seguir' : 'Dejar de seguir' }}
+      </button>
+    </div>
+  </div>
 
-  <div class="stats stats-horizontal shadow">
+  <!-- STATS -->
+  <div >
 
     <div class="animate-spin w-12 h-12 mx-auto" *ngIf="!social">
       <svg xmlns="http://www.w3.org/2000/svg" class="" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
@@ -36,69 +49,148 @@
       </svg>
     </div>
 
-    <section *ngIf="social">
+    <section *ngIf="social" class="stats shadow w-full">
 
-      <div class="stat cursor-pointer">
+      <label for="my-modal-seguidores" class="stat cursor-pointer">
         <div class="stat-title">Seguidores</div>
-        <div class="stat-value">2</div>
-      </div>
+        <div class="stat-value">{{social.seguidores.length}}</div>
+      </label>
 
-      <div class="stat cursor-pointer">
+      <label for="my-modal-seguidos" class="stat cursor-pointer">
         <div class="stat-title">Seguidos</div>
-        <div class="stat-value">1</div>
-      </div>
-
-      <div class="stat cursor-pointer">
-        <div class="stat-title">Amigos</div>
-        <div class="stat-value">1</div>
-      </div>
+        <div class="stat-value">{{social.seguidos.length}}</div>
+      </label>
 
     </section>
 
   </div>
 
   <section>
-    <div class="tabs">
-      <a class="tab md:tab-lg tab-lifted tab-active">Blogs</a>
-      <a class="tab md:tab-lg tab-lifted">Borradores</a>
-      <a class="tab md:tab-lg tab-lifted">Amigos</a>
+    <div class="tabs" *ngIf="usuario">
+      <a class="tab md:tab-lg tab-lifted" [ngClass]="{'tab-active': !isNoPub, ' ': isNoPub}" (click)="isNoPub = false">Blogs</a>
+      <a *ngIf="usuario._id === usuarioAuth._id" class="tab md:tab-lg tab-lifted" [ngClass]="{'tab-active': isNoPub, ' ': !isNoPub}" (click)="isNoPub = true">Borradores</a>
     </div>
-    <div class="w-full p-4 bg-base-100 rounded-b-lg rounded-tr-lg">
+    <div class="w-full p-4 bg-base-100 rounded-b-lg rounded-tr-lg" *ngIf="blogs && blogsNoPub">
 
       <!-- PUBLICADOS -->
-      <div class="card card-side bg-base-100 shadow-xl image-full">
-        <figure><img src="assets/blog.jpg" alt="portada"></figure>
-        <div class="card-body">
-          <h2 class="card-title">New movie is released!</h2>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Watch</button>
+      <section *ngIf="!isNoPub">
+
+        <!-- BLOGS VACIO -->
+        <div class="alert alert-info shadow-lg" *ngIf="blogs.length === 0">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Este usuario no tiene contenido</span>
           </div>
         </div>
-      </div>
+
+        <div class="card card-side bg-base-100 mb-2 shadow-xl image-full" *ngFor="let blogpub of blogs">
+          <figure><img [src]="blogpub.portada || 'assets/blog.jpg'" alt="portada"></figure>
+          <div class="card-body">
+            <h2 class="card-title">{{blogpub.titulo}}</h2>
+            <div class="card-actions justify-end">
+              <a [routerLink]="['/home/blogs', blogpub._id]" class="btn btn-primary">Watch</a>
+            </div>
+          </div>
+        </div>
+
+      </section>
 
       <!-- NO PUBLICADOS -->
-      <div class="flex p-3 justify-between rounded-lg shadow-md items-center">
-        <div>
-          <h3 class="font-bold">Como ser la persona más lista del universo</h3>
-          <div class="text-xs">Publicado hace 1 días</div>
+      <section *ngIf="isNoPub">
+
+        <!-- BLOGS NO PUBLICADOS VACIO -->
+        <div class="alert alert-info shadow-lg" *ngIf="blogsNoPub.length === 0">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Usted no tiene borradores</span>
+          </div>
         </div>
 
-        <div class="flex-none">
-          <label class="btn btn-square btn-sm btn-warning">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-            </svg>
-          </label>
+        <div class="flex p-3 justify-between rounded-lg shadow-md items-center" *ngFor="let blog of blogsNoPub">
+          <div class="flex">
+            <picture >
+              <img class="w-24 h-12" [src]="blog.portada || 'assets/blog.jpg'" alt="portada">
+            </picture>
 
-          <button class="btn btn-square btn-primary btn-sm ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-            </svg>
-          </button>
+            <div class="ml-2">
+              <h3 class="font-bold">{{blog.titulo}}</h3>
+              <div class="text-xs">Creado: {{blog.fecha | tiempo}}</div>
+            </div>
+          </div>
+
+          <div class="flex-none">
+            <label class="btn btn-square btn-sm btn-warning" (click)="eliminarBlogPrev(blog)">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </label>
+
+            <button class="btn btn-square btn-primary btn-sm ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+
+      </section>
 
     </div>
   </section>
 
 </main>
+
+<input type="checkbox" id="my-modal-seguidores" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative">
+    <label for="my-modal-seguidores" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="text-lg font-bold">Seguidores del usuario:</h3>
+    <div class="py-4 h-32 overflow-y-scroll" *ngIf="social">
+
+      <div class="alert alert-info shadow-lg" *ngIf="social.seguidores.length === 0">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Este usuario no tiene seguidores</span>
+        </div>
+      </div>
+
+      <a class="flex items-center mb-2" *ngFor="let usuario of social.seguidores" [routerLink]="['/home/perfil', usuario._id]">
+        <div class="avatar">
+          <div class="w-24 rounded-full">
+            <img [src]="usuario.img">
+          </div>
+        </div>
+        <p class="ml-2">{{usuario.nombre}}</p>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+
+<input type="checkbox" id="my-modal-seguidos" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative">
+    <label for="my-modal-seguidos" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="text-lg font-bold">Usuarios Seguidos:</h3>
+    <div class="py-4 h-32 overflow-y-scroll" *ngIf="social">
+
+      <div class="alert alert-info shadow-lg" *ngIf="social.seguidos.length === 0">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Este usuario no sigue a nadie</span>
+        </div>
+      </div>
+
+      <div class="flex items-center mb-2" *ngFor="let usuario of social.seguidos">
+        <a class="avatar" [routerLink]="['/home/perfil', usuario._id]">
+          <div class="w-12 rounded-full">
+            <img [src]="usuario.img">
+          </div>
+        </a>
+        <p class="ml-2">{{usuario.nombre}}</p>
+      </div>
+
+    </div>
+  </div>
+</div>

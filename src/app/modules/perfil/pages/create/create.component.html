@@ -1,1 +1,43 @@
-<p>create works!</p>
+<h1 class="text-center text-2xl font-bold mb-2">Crea tu nuevo blog</h1>
+
+<div class="alert alert-info shadow-lg mb-2">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span>Al dar click en Crear, tu blog no se publicará, sino que se guardará como un borrador</span>
+  </div>
+</div>
+
+<form [formGroup]="formulario" (submit)="crearBorrador()">
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Ingrese el titulo del blog</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('titulo', 'required')">El titulo es requerido</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('titulo', 'minlength')">Es muy pequeño</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('titulo', 'maxlength')">Es muy grande</span>
+    </label>
+    <input type="text"
+      formControlName="titulo"
+      placeholder="titulo"
+      class="input input-bordered w-full">
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">Seleccione la portada</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('portada', 'required')">La portada es requerida</span>
+      <span class="label-text-alt text-error" *ngIf="mensajeError('portada', 'extension')">El archivo no es una imagen valida</span>
+    </label>
+    <input type="file"
+      #file
+      formControlName="portada"
+      class="file-input file-input-bordered w-full">
+  </div>
+
+  <div class="w-full mt-4">
+      <button [disabled]="!formulario.valid" class="btn btn-wide btn-primary block mx-auto">
+        Crear blog
+      </button>
+  </div>
+
+</form>
