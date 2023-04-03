@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  host: 'http://localhost:8080'
+  host: 'https://alik-blogs-backend-production.up.railway.app'
 };

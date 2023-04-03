@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BlogService } from 'src/app/services/blog.service';
 import { ValidService } from 'src/app/services/valid.service';
@@ -14,16 +15,21 @@ export class CreateComponent implements OnDestroy {
 
   public subs: Subscription[] = [];
 
+  public isLoading: boolean = false;
+
+  private portada!: File | null;
+
   public formulario: FormGroup = this.formBuilder.group({
     titulo: ['', [Validators.required,
       Validators.maxLength(50), Validators.minLength(2)]],
-    portada: ['', [Validators.required, this.validService.validExtension]]
+    portada: [null, [this.validService.validExtension]]
   });
 
   constructor(
     private formBuilder: FormBuilder,
     private validService: ValidService,
-    private blogService: BlogService
+    private blogService: BlogService,
+    private router: Router
   ) { }
 
   public mensajeError(campo: string, errorType: string) {
@@ -35,17 +41,34 @@ export class CreateComponent implements OnDestroy {
   }
 
   public crearBorrador(): void {
-    const data = this.formulario.value;
+    this.isLoading = true;
+
+    const data = new FormData();
+    data.append('titulo', this.formulario.get('titulo')?.value);
+    if(this.portada)
+      data.append('portada', this.portada);
+
+    this.formulario.reset();
 
     const sub = this.blogService.crearBlogBorrador(data).subscribe({
       next: resp => {
-        console.log('Funciono');
-        console.log(resp);
+        this.isLoading = false;
+        this.router.navigate(['/home/perfil/editor', resp.blog._id]);
       },
       error: error => console.error( error )
     });
 
     this.subs.push( sub );
+  }
+
+  public seleccionarArchivo(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if(file) {
+      this.portada = file;
+      return;
+    }
+    this.portada = null;
   }
 
   ngOnDestroy(): void {

@@ -138,10 +138,41 @@ export class BlogService {
     );
   }
 
-  public crearBlogBorrador(data: any): Observable<any> {
-    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+  public crearBlogBorrador(data: FormData): Observable<IBlogResponse> {
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '')
+      .set('enctype', 'multipart/form-data');
 
-    return this.http.post<any>(this.host+'/blog', data, {headers}).pipe(
+    return this.http.post<IBlogResponse>(this.host+'/blog', data, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.usuarioService.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
+  public updateBlog(id: string, data: FormData): Observable<IBlogResponse> {
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '')
+      .set('enctype', 'multipart/form-data');
+
+    return this.http.put<IBlogResponse>(this.host+'/blog/'+id, data, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.usuarioService.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
+  public getBlogByIdAuth(id: string): Observable<IBlogResponse> {
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '');
+
+    return this.http.get<IBlogResponse>(this.host+'/blog/auth/'+id, {headers}).pipe(
       catchError( (error: HttpErrorResponse) => {
         if(error.status === 401) {
           this.usuarioService.authError = true;

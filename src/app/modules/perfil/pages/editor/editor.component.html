@@ -1,1 +1,66 @@
-<app-quill-editor></app-quill-editor>
+<main *ngIf="blog">
+
+
+  <form [formGroup]="formulario" (submit)="updateBorrador()">
+
+    <div class="form-control w-full mb-4">
+      <label class="label">
+        <span class="label-text">Titulo del blog</span>
+        <span class="label-text-alt text-error" *ngIf="mensajeError('titulo', 'minlength')">Es muy pequeño</span>
+        <span class="label-text-alt text-error" *ngIf="mensajeError('titulo', 'maxlength')">Es muy grande</span>
+      </label>
+      <input type="text"
+        formControlName="titulo"
+        [placeholder]="blog.titulo"
+        class="input input-bordered w-full">
+    </div>
+
+    <section class="flex-col sm:flex-row items-center flex gap-2">
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Seleccionar nueva portada</span>
+          <span class="label-text-alt text-error" *ngIf="mensajeError('portada', 'extension')">El archivo no es una imagen valida</span>
+        </label>
+        <input type="file"
+          #file
+          formControlName="portada"
+          (change)="seleccionarArchivo( $event )"
+          class="file-input file-input-bordered w-full">
+      </div>
+
+      <picture class="rounded-lg">
+        <p>Portada actual</p>
+        <img *ngIf="blog.portada" [src]="blog.portada" class="w-64 rounded-lg">
+        <div *ngIf="!blog.portada" class="bg-base-300 shadow-md rounded-lg h-24 w-64 text-center">No portada</div>
+      </picture>
+    </section>
+
+    <div class="animate-spin w-12 h-12 mx-auto mt-4" *ngIf="isLoading">
+      <svg xmlns="http://www.w3.org/2000/svg" class="" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+    </div>
+
+    <div class="w-full my-2">
+        <button [disabled]="!formulario.valid" class="btn btn-wide btn-primary block mx-auto">
+          Guardar Cambios
+        </button>
+    </div>
+
+  </form>
+
+  <hr>
+
+  <p class="text-lg mt-2">Contenido del blog</p>
+  <app-quill-editor [blog]="blog"></app-quill-editor>
+  <br>
+  <app-alert type="info" content="Al publicar el blog, este será visible públicamente, si no deseas publícarlo sólo cambia de página, el progreso se guarda solo."></app-alert>
+
+  <div class="w-full my-2">
+    <button class="btn btn-wide block mx-auto" [ngClass]="blog.publicado ? '' : 'btn-primary'" [disabled]="isLoadingPub" (click)="publicar()">
+      {{blog.publicado ? 'Pasar a borrador' : 'Publicar'}}
+    </button>
+  </div>
+
+
+</main>

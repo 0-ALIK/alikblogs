@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Response } from '../interfaces/responses.interface';
@@ -21,16 +21,33 @@ export class ValidService {
   ) {}
 
   public validExtension(formControl: FormControl): ValidationErrors | null {
+    if(!formControl.value) {
+      return null;
+    }
+
     const value: string[] = formControl.value.split('.');
     const extension = value[value.length - 1].toLowerCase();
     const extensiones: string[] = ['png', 'jpg', 'gif'];
 
-    if(!extensiones.includes(extension)) {
+    if(!extensiones.includes(extension) && extension.length !== 0) {
       return {
         extension: true
       }
     }
     return null;
+  }
+
+  public notEmpty(FormGroup: FormGroup): ValidationErrors | null {
+    const portada = FormGroup.get('portada');
+    const titulo = FormGroup.get('titulo');
+
+    if(portada?.value && portada.value.length > 0)
+      return null;
+
+    if(titulo?.value && titulo.value.length > 0)
+      return null;
+
+    return {formEmpty: true}
   }
 
   public existe(param: string): AsyncValidatorFn {

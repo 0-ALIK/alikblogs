@@ -7,9 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-ver-usuario',
-  templateUrl: './ver-usuario.component.html',
-  styles: [
-  ]
+  templateUrl: './ver-usuario.component.html'
 })
 export class VerUsuarioComponent implements OnInit, OnDestroy {
 

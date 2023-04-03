@@ -1,6 +1,9 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, Input, HostListener } from '@angular/core';
 import Quill, { QuillOptionsStatic, TextChangeHandler } from 'quill';
+import { Subscription } from 'rxjs';
+import { Blog } from 'src/app/interfaces/responses.interface';
+import { BlogService } from 'src/app/services/blog.service';
+import { UploadService } from 'src/app/services/upload.service';
 
 
 @Component({
@@ -18,6 +21,11 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   // Referencia html del editor
   @ViewChild('editor')
   public editorRef!: ElementRef<HTMLElement>;
+
+  public subs: Subscription[] = [];
+
+  @Input('blog')
+  public blog!: Blog
 
   // Quill editor
   public quillEditor!: Quill;
@@ -51,13 +59,17 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       const formData = new FormData();
       formData.append('imagen', file);
 
-      this.http.post('https://alik-blogs-backend-production.up.railway.app/upload/subir', formData).subscribe(
-        (resp: any) => {
+      const sub = this.uploadService.subirImagen(formData).subscribe({
+        next: resp => {
+          if(resp.tokenRenovado)
+            localStorage.setItem('token', resp.tokenRenovado);
           const { path } = resp;
           const range = this.quillEditor.getSelection();
           this.quillEditor.insertEmbed(range!.index, 'image', path);
         }
-      );
+      });
+
+      this.subs.push( sub );
     }
   };
 
@@ -74,8 +86,15 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
         removedOps.forEach((removedOp) => {
           if (removedOp.insert && removedOp.insert.hasOwnProperty('image')) {
-            const a = Object.getOwnPropertyDescriptor(removedOp.insert, 'image')?.value;
-            console.log(a);
+            const src = Object.getOwnPropertyDescriptor(removedOp.insert, 'image')?.value;
+            const sub = this.uploadService.borrarImagen(src).subscribe({
+              next: resp => {
+                if(resp.tokenRenovado)
+                  localStorage.setItem('token', resp.tokenRenovado);
+              }
+            });
+
+            this.subs.push( sub );
           }
         });
       }
@@ -84,16 +103,48 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
   // Métodos
   public constructor (
-    private http: HttpClient
+    private uploadService: UploadService,
+    private blogService: BlogService
   ) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  public saveData(event: Event): void {
+    const data = new FormData();
+    data.append('contenido', this.quillEditor.root.innerHTML);
+
+    this.blogService.updateBlog(this.blog._id, data).subscribe({
+      next: resp => {
+        if(resp.tokenRenovado)
+          localStorage.setItem('token', resp.tokenRenovado);
+      }
+    });
+  }
 
   public ngAfterViewInit(): void {
     this.quillEditor = new Quill( this.editorRef.nativeElement, this.quillOptions);
+
+    if(this.blog)
+      this.quillEditor.root.innerHTML = this.blog.contenido;
+
     this.toolbar = this.quillEditor.getModule('toolbar');
-    //this.toolbar.addHandler('image', this.imageHandler);
-    //this.quillEditor.on('text-change', this.deleteContents);
+    this.toolbar.addHandler('image', this.imageHandler);
+    this.quillEditor.on('text-change', this.deleteContents);
   }
 
-  public ngOnDestroy(): void {}
+  public ngOnDestroy(): void {
+
+    const data = new FormData();
+    data.append('contenido', this.quillEditor.root.innerHTML);
+
+    this.blogService.updateBlog(this.blog._id, data).subscribe({
+      next: resp => {
+        if(resp.tokenRenovado)
+          localStorage.setItem('token', resp.tokenRenovado);
+      }
+    });
+
+    if (this.subs && this.subs.length !== 0)
+      this.subs.forEach(sub => sub.unsubscribe());
+  }
 
 }

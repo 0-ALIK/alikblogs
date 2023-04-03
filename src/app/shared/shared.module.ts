@@ -9,6 +9,7 @@ import { QuillEditorComponent } from './components/quill-editor/quill-editor.com
 import { HttpClientModule } from '@angular/common/http';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { TiempoPipe } from './pipes/tiempo.pipe';
+import { AlertComponent } from './components/alert/alert.component';
 
 
 
@@ -21,6 +22,7 @@ import { TiempoPipe } from './pipes/tiempo.pipe';
     QuillEditorComponent,
     PaginatorComponent,
     TiempoPipe,
+    AlertComponent,
   ],
   exports: [
     HeaderComponent,
@@ -29,7 +31,8 @@ import { TiempoPipe } from './pipes/tiempo.pipe';
     ErrorComponent,
     QuillEditorComponent,
     PaginatorComponent,
-    TiempoPipe
+    TiempoPipe,
+    AlertComponent
   ],
   imports: [
     CommonModule,
