@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Usuario } from 'src/app/interfaces/responses.interface';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
   public isLoading: boolean = true;
 
   constructor (
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
       },
       error: error => console.log( error )
     });
+  }
+
+  public logout(): void {
+    localStorage.removeItem('token');
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {
