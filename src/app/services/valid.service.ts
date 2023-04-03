@@ -38,14 +38,17 @@ export class ValidService {
   }
 
   public notEmpty(FormGroup: FormGroup): ValidationErrors | null {
-    const portada = FormGroup.get('portada');
-    const titulo = FormGroup.get('titulo');
+    let hayValor: boolean = false;
 
-    if(portada?.value && portada.value.length > 0)
-      return null;
+    Object.keys( FormGroup.controls ).forEach(key => {
+      const control = FormGroup.get(key);
 
-    if(titulo?.value && titulo.value.length > 0)
-      return null;
+      if(control?.value && control.value.length > 0) {
+        hayValor = true;
+      }
+    });
+
+    if(hayValor) return null;
 
     return {formEmpty: true}
   }

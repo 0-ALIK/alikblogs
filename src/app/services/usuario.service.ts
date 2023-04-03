@@ -73,6 +73,21 @@ export class UsuarioService {
     );
   }
 
+  public updateUsuario(data: FormData): Observable<IAuth> {
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '')
+      .set('enctype', 'multipart/form-data');
+
+    return this.http.put<IAuth>(this.host+'/usuario/', data, {headers}).pipe(
+      catchError( (error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          this.authError = true;
+        }
+        return of();
+      })
+    );
+  }
+
   public verificarAuth(token: string): Observable<IAuth> {
     const headers = new HttpHeaders().set('x-token', token);
 

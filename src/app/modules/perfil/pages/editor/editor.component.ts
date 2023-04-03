@@ -70,8 +70,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   updateBorrador() {
     this.isLoading = true;
 
-    console.log(this.portada);
-
     const data = new FormData();
 
     if(this.formulario.get('titulo')?.value && this.formulario.get('titulo')?.value.length > 0)

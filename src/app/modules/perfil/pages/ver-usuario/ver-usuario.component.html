@@ -19,6 +19,7 @@
     <div *ngIf="usuario">
       <h1 class="text-center text-lg font-bold">{{usuario.nombre}}</h1>
       <p class="text-center">Desde {{usuario.fecha | tiempo}}</p>
+      <p>{{usuario.about || ''}}</p>
     </div>
 
     <!-- ESQUELETO -->
