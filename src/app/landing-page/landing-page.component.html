@@ -1,2 +1,26 @@
-<h1 class="text-2xl">Aquí aún no hay un Landing Page XD</h1>
-<a [routerLink]="['/auth/register']" class="btn btn-primary">Registrarse</a>
+<div class="w-screen h-screen bg-pink-800 items-center ">
+
+  <div class="bg-[url('/assets/wave3.svg')] w-full h-96 bg-no-repeat bg-cover absolute bottom-0">
+    <div class="bg-[url('/assets/wave2.svg')] w-full h-96 bg-no-repeat bg-cover">
+      <div class="bg-[url('/assets/wave.svg')] w-full h-96 bg-no-repeat bg-cover">
+
+      </div>
+    </div>
+  </div>
+
+
+  <a class="btn btn-ghost absolute top-2 right-2" [routerLink]="['/auth/login']">Iniciar sesión</a>
+
+
+  <div class="hero min-h-screen bg-pink-800">
+    <div class="hero-content flex-col lg:flex-row">
+      <img src="assets/logo.png" class="max-w-sm rounded-lg animate-bounce">
+      <div>
+        <h1 class="text-5xl font-bold">Alikblogs</h1>
+        <p class="py-6">Bienvenido a Alikblogs, una red social simple para redactar y publicar tus blogs, regístrate e interactúa con otros usuarios y lee sus blogs!</p>
+        <a class="btn btn-primary" [routerLink]="['/auth/register']">Empezar</a>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  host: 'https://alik-blogs-backend-production.up.railway.app'
+  host: 'https://alik-blogs-backend-production.up.railway.app/api'
 };
 
 /*
